@@ -1,4 +1,5 @@
 <img src="https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/telegram-obsidian.png" width="600">
+
 # Telegram Notifier
 [![License](http://poser.pugx.org/miralexsky/ozon-logistics-api/license)](https://packagist.org/packages/miralexsky/ozon-logistics-api)
 ### :white_check_mark: Plugin features
