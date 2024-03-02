@@ -3,8 +3,8 @@
 # Telegram Notifier
 [![License](http://poser.pugx.org/miralexsky/ozon-logistics-api/license)](https://packagist.org/packages/miralexsky/ozon-logistics-api)
 ### :white_check_mark: Plugin features
-- [X] Sending notification to telegram-bot by note property
-- [X] Sending notification to telegram-bot by inline mark
+- [X] Sending notifications to the Telegram bot using the note property
+- [X] Sending notifications to the Telegram bot using an inline template
 
 ![screen-telegram](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen3.png "Screen Telegram")
 
