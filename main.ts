@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
-	filesToNotify: Object[] = [];
+	filesToNotify: FileData[] = [];
 
 	async onload() {
 		await this.loadSettings();
@@ -99,7 +99,7 @@ export default class MyPlugin extends Plugin {
 		await this.sendNotifications();
 	}
 
-	private getDatesFromFileBody(content): Date[] {
+	private getDatesFromFileBody(content: string): Date[] {
 		let notifyDates: Date[] = [];
 		let lastOccurrence = -1;
 
@@ -135,7 +135,7 @@ export default class MyPlugin extends Plugin {
 				date = new Date(date.toDateString() + ` ${this.settings.notifyTime}`);
 				let now = new Date();
 
-				const diffTime = Math.abs(now - date);
+				const diffTime = Math.abs(now.getTime() - date.getTime());
 				const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
 				if (date > now || diffDays > 5) {
@@ -174,7 +174,7 @@ export default class MyPlugin extends Plugin {
 		return notifyDate;
 	}
 
-	private isDateNotificationSent(fileName: string, notifyDate: Date, pluginData): boolean {
+	private isDateNotificationSent(fileName: string, notifyDate: Date, pluginData: any): boolean {
 		return pluginData[fileName] && pluginData[fileName][notifyDate.getTime()];
 	}
 
@@ -275,4 +275,9 @@ class SampleSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 	}
+}
+
+interface FileData {
+	fileName: string;
+	notifyDates: Date[];
 }
