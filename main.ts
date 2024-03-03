@@ -222,7 +222,7 @@ class SampleSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Telegram Bot Token')
-			.setDesc('')
+			.setDesc('You need to create your own bot via @BotFather and get the token there.')
 			.addText(text => text
 				.setPlaceholder('Enter your token')
 				.setValue(this.plugin.settings.telegramToken)
@@ -233,9 +233,9 @@ class SampleSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Telegram Chat ID')
-			.setDesc('')
+			.setDesc('Chat ID can be obtained via telegram @getidsbot bot.')
 			.addText(text => text
-				.setPlaceholder('Enter your chat id')
+				.setPlaceholder('Enter your Chat ID')
 				.setValue(this.plugin.settings.telegramChatId)
 				.onChange(async (value) => {
 					this.plugin.settings.telegramChatId = value;
@@ -244,7 +244,7 @@ class SampleSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Schedule Property Name')
-			.setDesc('')
+			.setDesc('The name of note property, which used to schedule notifications')
 			.addText(text => text
 				.setPlaceholder('Enter property name')
 				.setValue(this.plugin.settings.fileScheduleProperty)
@@ -255,7 +255,8 @@ class SampleSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Schedule Inline Prefix')
-			.setDesc('')
+			.setDesc('The prefix followed by the a date is used to schedule notifications. ' +
+				'For example, the following line in a note would cause the plugin to send a notification: "📅 2024-01-01"')
 			.addText(text => text
 				.setPlaceholder('Enter inline prefix')
 				.setValue(this.plugin.settings.fileSchedulePrefix)
@@ -266,7 +267,8 @@ class SampleSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Notify Time')
-			.setDesc('Time for dates without time')
+			.setDesc('Default time for dates with no time specified. For example, a "6:00" value will cause the plugin ' +
+				'to send a notification not earlier before 6:00.')
 			.addText(text => text
 				.setPlaceholder('Enter time')
 				.setValue(this.plugin.settings.notifyTime)
