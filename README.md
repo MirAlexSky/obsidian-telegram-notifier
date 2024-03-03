@@ -11,7 +11,12 @@
 
 ![screen-telegram](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen3.png "Screen Telegram")
 
-<h2>:rocket:Getting started</h2>
+## Table of Contents
+* [Getting Started](#rocketgetting-started)
+* [Sending Notifications](#bell-sending-notifications)
+* [Tips](#bulb-tips)
+
+<h2>:rocket:Getting Started</h2>
 
 1. First, you need to create your own Telegram bot.
 This process only takes about 3 minutes and can be done by writing to [@BotFather](https://t.me/BotFather).
@@ -34,7 +39,7 @@ Simply write to him and it will send you your `Chat ID`. It will look something 
 5. Reload plugin after configuring it. 
 6. Done!
 
-### :bell: Sending notifications
+### :bell: Sending Notifications
 To create scheduled notifications, simply add the _"scheduled"_
 property to your file (or use your own if you've changed it in the settings). 
 Also, you can add the date directly in the body of the file, preceded by 📅 (which can be changed in the settings as well).
