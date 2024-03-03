@@ -25,7 +25,7 @@ You can get a bot token through @BotFather.
 Simply write to him and it will send you your chat ID. It will look something like this:<br> 
 👤 You <br>
    ├ id: 123456789 _<- your chat ID_
-   * If the upper steps didn't work, there is an alternative solution:
+   * If the upper step didn't work, there is an alternative solution:
 	 Go to https://api.telegram.org/bot{YourBotToken}/getUpdates,
 	 and replace {YourBotToken} with your actual token.
 	 You should see something like "chat":{"id":123456789, copy the "id" number (123456789) - this is your chat ID.
