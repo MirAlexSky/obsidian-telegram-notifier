@@ -51,8 +51,8 @@ Plugin scans for new notifications every 50 seconds.
 
 ### :bulb: Tips
 
-The best way for me is to use note properties as far as you
-can simply pick a date via user interface, using the Obsidian's native properties feature.
+The best way for me to use this plugin is by note properties as far as you
+can simply pick a date via the user interface, using the Obsidian's built-in properties feature.
 
 Otherwise, if you need to insert an inline date, the 
 [Date Inserter plugin](https://github.com/namikaze-40p/obsidian-date-inserter)
