@@ -1,6 +1,6 @@
 # :warning: The plugin is green. Use at your own risk.
 
-<img src="https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/telegram-obsidian.png" width="800">
+<img src="https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/telegram-obsidian.png" width="800" alt="Telegra + Obsidian">
 
 # Telegram Notifier
 [![License](http://poser.pugx.org/miralexsky/ozon-logistics-api/license)](https://packagist.org/packages/miralexsky/ozon-logistics-api)
@@ -12,11 +12,11 @@
 ![screen-telegram](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen3.png "Screen Telegram")
 
 ## Table of Contents
-* [:rocket: Getting Started](#rocketgetting-started)
+* [:rocket: Getting Started](#rocket-getting-started)
 * [:bell: Sending Notifications](#bell-sending-notifications)
 * [:bulb: Tips](#bulb-tips)
 
-<h2>:rocket:Getting Started</h2>
+### :rocket: Getting Started
 
 1. First, you need to create your own Telegram bot.
 This process only takes about 3 minutes and can be done by writing to [@BotFather](https://t.me/BotFather).
