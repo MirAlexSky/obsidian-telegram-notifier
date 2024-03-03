@@ -37,7 +37,7 @@ Simply write to him and it will send you your chat ID. It will look something li
 ### :bell: Sending notifications
 To create scheduled notifications, simply add the "scheduled"
 property to your file (or use your own if you've changed it in the settings). 
-Also, you can add the data directly in the body of the file, preceded by 📅 (which can be changed in the settings as needed).
+Also, you can add the date directly in the body of the file, preceded by 📅 (which can be changed in the settings as needed).
 
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen1.png "Screen #1")
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen2.png "Screen #2")
