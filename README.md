@@ -44,6 +44,8 @@ To create scheduled notifications, simply add the _"scheduled"_
 property to your file (or use your own if you've changed it in the settings). 
 Also, you can add the date directly in the body of the file, preceded by 📅 (which can be changed in the settings as well).
 
+Plugin scans for new notifications every 50 seconds.
+
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen2.png "Screen #2")
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen1.png "Screen #1")
 
