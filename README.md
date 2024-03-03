@@ -24,7 +24,7 @@ You can get a `Bot Token` through @BotFather.
 3. Obtain your `Chat ID`, you can use the [@getidsbot](https://t.me/getidsbot) bot. 
 Simply write to him and it will send you your `Chat ID`. It will look something like this:<br> 
 `👤 You` <br>
-   `├ id: 123456789` _:point_left: your `Chat ID`_
+   `├ id: 123456789` :point_left: _your `Chat ID`_
    * If the upper step didn't work, there is an alternative solution:
 	 Go to https://api.telegram.org/bot{YourBotToken}/getUpdates,
 	 and replace {YourBotToken} with your actual token.
@@ -39,8 +39,8 @@ To create scheduled notifications, simply add the _"scheduled"_
 property to your file (or use your own if you've changed it in the settings). 
 Also, you can add the date directly in the body of the file, preceded by 📅 (which can be changed in the settings as well).
 
-![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen1.png "Screen #1")
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen2.png "Screen #2")
+![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen1.png "Screen #1")
 
 ### :bulb: Tips
 
