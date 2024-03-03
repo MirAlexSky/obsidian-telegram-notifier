@@ -13,20 +13,28 @@
 
 <h2>:rocket:Getting started</h2>
 
-First, you need to create your own Telegram bot.
+1. First, you need to create your own Telegram bot.
 This process only takes about 3 minutes and can be done by writing to [@BotFather](https://t.me/BotFather).
 Follow the instructions to create a new bot and set it up as desired.
 If you need more information about creating your own Telegram Bot, you can find it on the telegram official website.
 
-Next, obtain your Bot token and Chat ID from the bot you've created. These values are required to configure the plugin.
-You can get a bot token through @BotFather. Getting a Chat ID is a bit more complicated: 
-Go to https://api.telegram.org/bot{YourBotToken}/getUpdates, and replace {YourBotToken} with your actual token.
-You should see something like "chat":{"id":261860914, copy the "id" number (261860914) - this is your chat ID.
+2. Next, obtain your Bot token from the bot you've created. These values are required to configure the plugin.
+You can get a bot token through @BotFather. 
 
-Fill these in the plugin settings and add other information as you choose.
+3. Obtain your chat ID, you can use the [@getidsbot](https://t.me/getidsbot) bot. 
+Simply write to him and it will send you your chat ID. It will look something like this:<br> 
+👤 You <br>
+   ├ id: 123456789 _<- your chat ID_
+   * If the upper steps didn't work, there is an alternative solution:
+	 Go to https://api.telegram.org/bot{YourBotToken}/getUpdates,
+	 and replace {YourBotToken} with your actual token.
+	 You should see something like "chat":{"id":123456789, copy the "id" number (123456789) - this is your chat ID.
 
-After configuring the plugin, reload it and that's it!
+4. Fill Bot Token and chat ID in the plugin settings and add other information as you choose.
+5. Reload plugin after configuring it. 
+6. Done!
 
+### :bell: Sending notifications
 To create scheduled notifications, simply add the "scheduled"
 property to your file (or use your own if you've changed it in the settings). 
 Also, you can add the data directly in the body of the file, preceded by 📅 (which can be changed in the settings as needed).
