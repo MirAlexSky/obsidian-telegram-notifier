@@ -18,7 +18,7 @@ This process only takes about 3 minutes and can be done by writing to [@BotFathe
 Follow the instructions to create a new bot and set it up as desired.
 If you need more information about creating your own Telegram Bot, you can find it on the telegram official website.
 
-Next, obtain your Bot token and Chat ID from the bot you created. These values are required to configure the plugin.
+Next, obtain your Bot token and Chat ID from the bot you've created. These values are required to configure the plugin.
 You can get a bot token through @BotFather. Getting a Chat ID is a bit more complicated: 
 Go to https://api.telegram.org/bot{YourBotToken}/getUpdates, and replace {YourBotToken} with your actual token.
 You should see something like "chat":{"id":261860914, copy the "id" number (261860914) - this is your chat ID.
