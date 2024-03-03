@@ -34,7 +34,7 @@ Also, you can add the data directly in the body of the file, preceded by 📅 (w
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen1.png "Screen #1")
 ![screen](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen2.png "Screen #2")
 
-### Tips
+### :bulb: Tips
 
 The best way for me is to use note properties as far as you
 can simply pick a date via UI, using the native Obsidian properties feature.
