@@ -12,9 +12,9 @@
 ![screen-telegram](https://github.com/MirAlexSky/obsidian-telegram-notifier/blob/master/images/screen3.png "Screen Telegram")
 
 ## Table of Contents
-* [Getting Started](#rocketgetting-started)
-* [Sending Notifications](#bell-sending-notifications)
-* [Tips](#bulb-tips)
+* [:rocket: Getting Started](#rocketgetting-started)
+* [:bell: Sending Notifications](#bell-sending-notifications)
+* [:bulb: Tips](#bulb-tips)
 
 <h2>:rocket:Getting Started</h2>
 
