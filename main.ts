@@ -6,6 +6,11 @@ interface MyPluginSettings {
 	fileScheduleProperty: string,
 	fileSchedulePrefix: string,
 	notifyTime: string,
+	notificationsSent: {
+		[key: string]: {
+			[key: string]: boolean
+		}
+	}
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
@@ -14,6 +19,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 	fileScheduleProperty: 'scheduled',
 	fileSchedulePrefix: '📅',
 	notifyTime: '6:00',
+	notificationsSent: {},
 }
 
 export default class MyPlugin extends Plugin {
@@ -24,20 +30,21 @@ export default class MyPlugin extends Plugin {
 		await this.loadSettings();
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 
-		let pluginIsConfigured: boolean = Boolean(
+		const pluginIsConfigured = Boolean(
 			this.settings.telegramToken
-				&& this.settings.telegramChatId
-				&& this.settings.fileScheduleProperty
-				&& this.settings.fileSchedulePrefix);
+			&& this.settings.telegramChatId
+			&& this.settings.fileScheduleProperty
+			&& this.settings.fileSchedulePrefix);
 
 		if (pluginIsConfigured) {
-			this.init(this.settings.fileScheduleProperty, this.settings.fileSchedulePrefix);
+			this.init();
 		} else {
-			new Notice('Please configure the plugin settings');
+			new Notice('Please, configure the plugin settings');
+			console.log('Telegram Notifier: plugin isn\'t configured');
 		}
 	}
 
-	private init(fileScheduleProperty: string, fileSchedulePrefix: string) {
+	private init() {
 		this.app.workspace.onLayoutReady(async () => {
 			this.setIntervalScan();
 		});
@@ -53,8 +60,10 @@ export default class MyPlugin extends Plugin {
 		this.registerInterval(
 			window.setInterval(() => {
 				if (scanInProgress) {
+					console.log('Telegram Notifier: the scan is in progress too long!')
 					return;
 				}
+
 				scanInProgress = true;
 
 				this.scan().finally(() => {
@@ -70,13 +79,11 @@ export default class MyPlugin extends Plugin {
 		this.filesToNotify = [];
 
 		for (const file of vault.getMarkdownFiles()) {
-			let fileName = file.basename;
-			let notifyDates: Date[] = [];
-
-			let content = await vault.cachedRead(file);
+			const fileName = file.basename;
+			const notifyDates: Date[] = [];
+			const content = await vault.cachedRead(file);
 
 			let notifyDate: Date|null = null;
-			let pluginData = await this.loadData();
 
 			notifyDate = this.getDateFromFileProperties(content);
 			if (notifyDate)
@@ -84,25 +91,32 @@ export default class MyPlugin extends Plugin {
 
 			notifyDates.push(...this.getDatesFromFileBody(content));
 
-			if (notifyDates.length !== 0) {
-				let newNotifyDates: Date[] = [];
+			if (notifyDates.length === 0)
+				continue;
 
-				for (notifyDate of notifyDates) {
-					if (!this.isDateNotificationSent(fileName, notifyDate, pluginData))
-						newNotifyDates.push(notifyDate);
+			const newNotifyDates: Date[] = [];
+
+			for (notifyDate of notifyDates) {
+				if (this.isNotificationAllowedToSend(fileName, notifyDate)) {
+					newNotifyDates.push(notifyDate);
 				}
-
-				this.filesToNotify.push({fileName, notifyDates: newNotifyDates});
 			}
+
+			this.filesToNotify.push({
+				fileName,
+				isToSend: newNotifyDates.length > 0,
+				notifyDates: newNotifyDates
+			});
 		}
 
-		await this.sendNotifications();
+		await this.sendNotificationsToBot();
 	}
 
 	private getDatesFromFileBody(content: string): Date[] {
-		let notifyDates: Date[] = [];
+		const notifyDates: Date[] = [];
 		let lastOccurrence = -1;
 
+		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			lastOccurrence = content.indexOf(this.settings.fileSchedulePrefix, lastOccurrence + 1);
 			if (lastOccurrence == undefined || lastOccurrence === -1)
@@ -113,15 +127,15 @@ export default class MyPlugin extends Plugin {
 				content.slice(lastOccurrenceWithoutPrefix).length -
 				content.slice(lastOccurrenceWithoutPrefix).trimStart().length;
 
-			let spaceOccurrence = content.slice(lastOccurrenceWithoutPrefix).search(/[ \n]/)
+			const spaceOccurrence = content.slice(lastOccurrenceWithoutPrefix).search(/[ \n]/)
 				+ lastOccurrenceWithoutPrefix;
 
 			if (spaceOccurrence === -1)
 				continue;
 
-			let notifyDateContent = content.substring(lastOccurrenceWithoutPrefix, spaceOccurrence).trim();
+			const notifyDateContent = content.substring(lastOccurrenceWithoutPrefix, spaceOccurrence).trim();
 
-			let date = this.getDateFromContent(notifyDateContent);
+			const date = this.getDateFromContent(notifyDateContent);
 			if (date)
 				notifyDates.push(date);
 		}
@@ -129,44 +143,28 @@ export default class MyPlugin extends Plugin {
 		return notifyDates;
 	}
 
-	private async sendNotifications() {
+	private async sendNotificationsToBot() {
+		console.log('Telegram Notifier: prepare for sending notifications. Scheduled files found:');
+		console.dir(this.filesToNotify);
+
 		for (const file of this.filesToNotify) {
-			for (let date of file.notifyDates) {
-				date = new Date(date.toDateString() + ` ${this.settings.notifyTime}`);
-				let now = new Date();
-
-				const diffTime = Math.abs(now.getTime() - date.getTime());
-				const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-				if (date > now || diffDays > 5) {
-					continue;
-				}
-
-				let pluginData = await this.loadData();
-
-				if (pluginData[file.fileName] && pluginData[file.fileName][date.getTime()])
-					continue;
-
-				let message = `>📅 You have a task due on _${date.toDateString()}_\n👉 \`${file.fileName}\``;
-
-				this.sendMessageToBot(
-					this.settings.telegramToken,
-					this.settings.telegramChatId,
-					encodeURIComponent(message)
-				);
-
-				if (!pluginData[file.fileName])
-					pluginData[file.fileName] = {};
-
-				pluginData[file.fileName][date.getTime()] = true;
-
-				await this.saveData(pluginData);
+			for (const date of file.notifyDates) {
+				this.sendNotificationToBot(date, file.fileName);
 			}
 		}
 	}
 
-	private getDateFromContent(notifyDateContent: string): Date|null {
-		let notifyDate = new Date(notifyDateContent);
+	private async saveFileDateAsSent(fileName: string, notifyDate: Date) {
+		if (!this.settings.notificationsSent[fileName])
+			this.settings.notificationsSent[fileName] = {};
+
+		this.settings.notificationsSent[fileName][notifyDate.getTime()] = true;
+
+		await this.saveSettings();
+	}
+
+	private getDateFromContent(notifyDateContent: string): Date | null {
+		const notifyDate = new Date(notifyDateContent);
 
 		if (notifyDate.toString() === "Invalid Date" || isNaN(notifyDate.getDate()))
 			return null;
@@ -174,8 +172,21 @@ export default class MyPlugin extends Plugin {
 		return notifyDate;
 	}
 
-	private isDateNotificationSent(fileName: string, notifyDate: Date, pluginData: any): boolean {
-		return pluginData[fileName] && pluginData[fileName][notifyDate.getTime()];
+	private isDateNotificationSent(fileName: string, notifyDate: Date): boolean {
+		return Boolean(this.settings.notificationsSent[fileName]
+			&& this.settings.notificationsSent[fileName][notifyDate.getTime()]);
+	}
+
+	private isNotificationAllowedToSend(fileName: string, date: Date) {
+		const dateTime = new Date(date.toDateString() + ` ${this.settings.notifyTime}`);
+		const now = new Date();
+
+		const diffTime = Math.abs(now.getTime() - dateTime.getTime());
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+		const isNotToSend = (dateTime > now) || (diffDays > 5) || this.isDateNotificationSent(fileName, date);
+
+		return !isNotToSend;
 	}
 
 	async loadSettings() {
@@ -186,15 +197,46 @@ export default class MyPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
-	private sendMessageToBot(botToken: string, chatId: string, message: string): void {
-		fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=MarkdownV2`);
+	private sendNotificationToBot(date: Date, fileName: string) {
+		const message = `>📅 You have a task due on _${date.toDateString()}_\n👉 \`${fileName}\``;
+
+		this.sendMessageToBot(encodeURIComponent(message))
+			.then(async (r) => {
+				if (!r.ok)
+					return;
+
+				await this.saveFileDateAsSent(fileName, date);
+			});
 	}
 
-	private getDateFromFileProperties(content: string): Date|null {
+	private sendMessageToBot(message: string): Promise<Response> {
+		const botToken = this.settings.telegramToken;
+		const chatId = this.settings.telegramChatId;
+
+		const url =
+			`https://api.telegram.org/bot${botToken}/sendMessage?
+			chat_id=${chatId}&text=${message}
+			&parse_mode=MarkdownV2`;
+
+		return fetch(url)
+			.then(async r => {
+				console.log('Telegram Notifier: the message was sent to the bot. Request URI:');
+				console.log(decodeURIComponent(url));
+				console.dir({
+					status: r.status,
+					statusText: r.statusText,
+					body: await r.json(),
+				});
+
+				return r;
+			});
+	}
+
+	private getDateFromFileProperties(content: string): Date | null {
 		if (content.substring(0, 3) !== '---')
 			return null;
 
-		let propertiesContent = content.substring(3, content.indexOf('---', 2));
+		const propertiesContent = content.substring(3, content.indexOf('---', 2));
 		let scheduledProperty =
 			propertiesContent.split(`${this.settings.fileScheduleProperty}:`)[1] ?? null;
 
@@ -281,5 +323,6 @@ class SampleSettingTab extends PluginSettingTab {
 
 interface FileData {
 	fileName: string;
+	isToSend: boolean,
 	notifyDates: Date[];
 }
