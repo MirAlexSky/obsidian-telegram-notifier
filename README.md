@@ -24,7 +24,7 @@ Follow the instructions to create a new bot and set it up as desired.
 If you need more information about creating your own Telegram Bot, you can find it on the telegram official website.
 
 2. Next, obtain your `Bot Token` from the bot you've created. These values are required to configure the plugin.
-You can get a `Bot Token` through @BotFather. 
+You can get a `Bot Token` through [@BotFather](https://t.me/BotFather). 
 
 3. Obtain your `Chat ID`, you can use the [@getidsbot](https://t.me/getidsbot) bot. 
 Simply write to him and it will send you your `Chat ID`. It will look something like this:<br> 
@@ -36,7 +36,7 @@ Simply write to him and it will send you your `Chat ID`. It will look something 
 	 You should see something like "chat":{"id":123456789, copy the "id" number (123456789) - this is your `Chat ID`.
 
 4. Fill `Bot Token` and `Chat ID` in the plugin settings and add other information as you choose.
-5. Reload plugin after configuring it. 
+5. Reload the obsidian after configuring the plugin. 
 6. Done!
 
 ### :bell: Sending Notifications

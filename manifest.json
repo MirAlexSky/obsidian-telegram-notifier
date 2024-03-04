@@ -3,7 +3,7 @@
 	"name": "Telegram Notifier",
 	"version": "1.0.0",
 	"minAppVersion": "1.0.0",
-	"description": "This plugin is designed to send notifications in telegram bot, so you can be sure that you'll never miss an important task! Check it out and see how it can help you!",
+	"description": "This plugin is designed to send notifications in telegram bot, so you can be sure that you'll never miss an important task!",
 	"author": "Alex Sinus",
 	"authorUrl": "https://github.com/MirAlexSky/obsidian-telegram-notifier",
 	"isDesktopOnly": false
