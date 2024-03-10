@@ -75,6 +75,7 @@ export default class MyPlugin extends Plugin {
 
 	private async scan(): Promise<void> {
 		const {vault} = this.app;
+		await this.loadSettings();
 
 		this.filesToNotify = [];
 
