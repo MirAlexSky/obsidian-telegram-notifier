@@ -80,6 +80,12 @@ export default class MyPlugin extends Plugin {
 		this.filesToNotify = [];
 
 		for (const file of vault.getMarkdownFiles()) {
+
+			if (new Date().getTime() - file.stat.mtime < 1000 * 60 * 2) {
+				console.log('Note has just modified! ' + file.basename + ': ' + ((new Date().getTime() - file.stat.mtime)/1000) + ' sec ago');
+				continue;
+			}
+
 			const fileName = file.basename;
 			const notifyDates: Date[] = [];
 			const content = await vault.cachedRead(file);
@@ -120,6 +126,7 @@ export default class MyPlugin extends Plugin {
 		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			lastOccurrence = content.indexOf(this.settings.fileSchedulePrefix, lastOccurrence + 1);
+
 			if (lastOccurrence == undefined || lastOccurrence === -1)
 				break;
 
@@ -128,13 +135,13 @@ export default class MyPlugin extends Plugin {
 				content.slice(lastOccurrenceWithoutPrefix).length -
 				content.slice(lastOccurrenceWithoutPrefix).trimStart().length;
 
-			const spaceOccurrence = content.slice(lastOccurrenceWithoutPrefix).search(/[ \n]/)
+			const endOfDateOccurrence = content.slice(lastOccurrenceWithoutPrefix).search(/[ \n]|$/m)
 				+ lastOccurrenceWithoutPrefix;
 
-			if (spaceOccurrence === -1)
+			if (endOfDateOccurrence === -1)
 				continue;
 
-			const notifyDateContent = content.substring(lastOccurrenceWithoutPrefix, spaceOccurrence).trim();
+			const notifyDateContent = content.substring(lastOccurrenceWithoutPrefix, endOfDateOccurrence).trim();
 
 			const date = this.getDateFromContent(notifyDateContent);
 			if (date)
