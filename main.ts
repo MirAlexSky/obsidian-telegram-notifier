@@ -80,9 +80,8 @@ export default class MyPlugin extends Plugin {
 		this.filesToNotify = [];
 
 		for (const file of vault.getMarkdownFiles()) {
-
 			if (new Date().getTime() - file.stat.mtime < 1000 * 60 * 2) {
-				console.log('Note has just modified! ' + file.basename + ': ' + ((new Date().getTime() - file.stat.mtime)/1000) + ' sec ago');
+				console.log('Note has just modified! ' + file.basename + ': ' + ((new Date().getTime() - file.stat.mtime) / 1000) + ' sec ago');
 				continue;
 			}
 
@@ -90,7 +89,7 @@ export default class MyPlugin extends Plugin {
 			const notifyDates: Date[] = [];
 			const content = await vault.cachedRead(file);
 
-			let notifyDate: Date|null = null;
+			let notifyDate: Date | null = null;
 
 			notifyDate = this.getDateFromFileProperties(content);
 			if (notifyDate)
@@ -186,13 +185,22 @@ export default class MyPlugin extends Plugin {
 	}
 
 	private isNotificationAllowedToSend(fileName: string, date: Date) {
-		const dateTime = new Date(date.toDateString() + ` ${this.settings.notifyTime}`);
+
+		let notifyDateTime = date;
+
+		if (date.getUTCHours() === 0) {
+			notifyDateTime = new Date(date.toDateString() + ` ${this.settings.notifyTime}`);
+		}
+
 		const now = new Date();
 
-		const diffTime = Math.abs(now.getTime() - dateTime.getTime());
+		const diffTime = Math.abs(now.getTime() - notifyDateTime.getTime());
 		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-		const isNotToSend = (dateTime > now) || (diffDays > 5) || this.isDateNotificationSent(fileName, date);
+		const isNotToSend =
+			notifyDateTime > now
+			|| (diffDays > 5)
+			|| this.isDateNotificationSent(fileName, date);
 
 		return !isNotToSend;
 	}
@@ -206,7 +214,7 @@ export default class MyPlugin extends Plugin {
 	}
 
 	private sendNotificationToBot(date: Date, fileName: string) {
-		const message = `>📅 You have a task due on _${date.toDateString()}_\n👉 \`${fileName}\``;
+		const message = `>📅 You have a task due on _${date.toLocaleString()}_\n👉 \`${fileName}\``;
 
 		this.sendMessageToBot(encodeURIComponent(message))
 			.then(async (r) => {
@@ -251,7 +259,7 @@ export default class MyPlugin extends Plugin {
 		if (!scheduledProperty)
 			return null;
 
-		scheduledProperty = scheduledProperty.trim().split(/([ \n])/)[0];
+		scheduledProperty = scheduledProperty.trim().split(/([ \n]|$)/m)[0];
 
 		return this.getDateFromContent(scheduledProperty);
 	}
