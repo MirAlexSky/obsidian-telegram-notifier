@@ -1,7 +1,7 @@
 {
 	"id": "telegram-notifier",
 	"name": "Telegram Notifier",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"minAppVersion": "1.0.0",
 	"description": "This plugin is designed to send notifications in telegram bot, so you can be sure that you'll never miss an important task!",
 	"author": "Alex Sinus",
